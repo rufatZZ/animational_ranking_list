@@ -9,15 +9,17 @@ var Diff;
 var firstBox;
 var firstBoxPoint;
 var moveableBoxes;
+var randomNumber;
 var randomBox;
 var heightBox;
 var lastBox = [];
+var topPositions = [];
 
 
 function reset() {
-    $("ul").find("li").css({
-        top: ""
-    });
+    // $("ul").find("li").css({
+    //         top: "0px"
+    //     });
     $("ul").find(".active").removeClass("active");
 
 }
@@ -26,67 +28,86 @@ function getFirstBoxPoint(pass) {
     return pass;
 }
 
-function randomNumber(min, max) {
+function getRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-
 heightBox = $("ul li").height();
+
+
+for (p = 0; p < useBoxes.length; p++) {
+    topPositions.push($(useBoxes[p]).offset().top);
+}
+console.log(topPositions);
+
+firstBoxPoint = getFirstBoxPoint(4);
+
+moveableBoxes = useBoxes.slice(firstBoxPoint);
+firstBox = $(moveableBoxes[0]);
 
 $("#check").on("click", function() {
     try {
-        reset();
 
-        firstBoxPoint = getFirstBoxPoint(4);
-        firstBox = $(useBoxes[firstBoxPoint]);
-        moveableBoxes = useBoxes.slice(firstBoxPoint);
-        randomBox = $(moveableBoxes[randomNumber(0, moveableBoxes.length - 1)]);
+        randomNumber = getRandomNumber(0, moveableBoxes.length - 1);
+        randomBox = $(moveableBoxes[randomNumber]);
+        reset();
         randomBox.addClass("active");
 
-        // if (lastBox.length === 0) {
-        //     Diff = firstBox.offset().top - randomBox.offset().top;
-        // } else {
-        //     Diff = $(lastBox[0]).offset().top - randomBox.offset().top;
-        // }
+
         Diff = firstBox.offset().top - randomBox.offset().top;
-        lastBox.unshift(randomBox);
+
+        console.log(moveableBoxes);
+        moveableBoxes.splice(randomNumber, 1);
+        moveableBoxes.unshift(randomBox[0]);
+        console.log(moveableBoxes);
+
+
+
+
         $(randomBox)
             .animate({
                 "top": Diff
             });
 
-        for (var i = 0; i < moveableBoxes.length; i++) {
 
-            function loopBox(index) {
-                return $(moveableBoxes[index]);
-            }
+        // for (var i = 0; i < moveableBoxes.length; i++) {
 
-            var heightBox = $("ul li").height(); //
+        //     function loopBox(index) {
+        //         return $(moveableBoxes[index]);
+        //     }
 
-            if (loopBox(i).hasClass("active")) {
-                continue;
+        //     heightBox = $("ul li").height();
 
-            } else {
+        //     if (loopBox(i).hasClass("active")) {
+        //         continue;
 
-                if (i > 0) {
-                    var distanceBetweenBoxes = loopBox(i).offset().top - randomBox.offset().top;
+        //     } else {
 
-                    if (distanceBetweenBoxes > 5) {
-                        loopBox(i).animate({
-                            "top": 0
-                        });
-                    } else {
-                        loopBox(i).animate({
-                            "top": heightBox + 5
-                        });
-                    }
-                } else {
-                    loopBox(i).animate({
-                        "top": heightBox + 5
-                    });
-                }
-            }
+        //         if (i > 0) {
+        //             var distanceBetweenBoxes = loopBox(i).offset().top - randomBox.offset().top;
+
+        //             if (distanceBetweenBoxes > 5) {
+        //                 loopBox(i).animate({
+        //                     "top": 0
+        //                 });
+        //             } else {
+        //                 loopBox(i).animate({
+        //                     "top": heightBox + 5
+        //                 });
+        //             }
+        //         } else {
+        //             loopBox(i).animate({
+        //                 "top": heightBox + 5
+        //             });
+        //         }
+        //     }
+        // }
+
+        for (var c = 0; c < moveableBoxes.length; c++) {
+            $(moveableBoxes[c]).offset({ top: topPositions[firstBoxPoint + c] });
         }
+
+
     } catch (err) {
         console.log("We have an error man! " + err);
     }
