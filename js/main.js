@@ -17,9 +17,9 @@ var topPositions = [];
 
 
 function reset() {
-    // $("ul").find("li").css({
-    //         top: "0px"
-    //     });
+    $("ul").find("li").css({
+        top: "0px"
+    });
     $("ul").find(".active").removeClass("active");
 
 }
@@ -41,12 +41,17 @@ for (p = 0; p < useBoxes.length; p++) {
 console.log(topPositions);
 
 firstBoxPoint = getFirstBoxPoint(4);
-
 moveableBoxes = useBoxes.slice(firstBoxPoint);
 firstBox = $(moveableBoxes[0]);
 
 $("#check").on("click", function() {
     try {
+
+        function changePositions() {
+            for (var c = 0; c < moveableBoxes.length; c++) {
+                $(moveableBoxes[c]).offset({ top: topPositions[firstBoxPoint + c] });
+            }
+        }
 
         randomNumber = getRandomNumber(0, moveableBoxes.length - 1);
         randomBox = $(moveableBoxes[randomNumber]);
@@ -61,51 +66,51 @@ $("#check").on("click", function() {
         moveableBoxes.unshift(randomBox[0]);
         console.log(moveableBoxes);
 
-
-
-
-        $(randomBox)
-            .animate({
-                "top": Diff
-            });
-
-
-        // for (var i = 0; i < moveableBoxes.length; i++) {
-
-        //     function loopBox(index) {
-        //         return $(moveableBoxes[index]);
-        //     }
-
-        //     heightBox = $("ul li").height();
-
-        //     if (loopBox(i).hasClass("active")) {
-        //         continue;
-
-        //     } else {
-
-        //         if (i > 0) {
-        //             var distanceBetweenBoxes = loopBox(i).offset().top - randomBox.offset().top;
-
-        //             if (distanceBetweenBoxes > 5) {
-        //                 loopBox(i).animate({
-        //                     "top": 0
-        //                 });
-        //             } else {
-        //                 loopBox(i).animate({
-        //                     "top": heightBox + 5
-        //                 });
-        //             }
-        //         } else {
-        //             loopBox(i).animate({
-        //                 "top": heightBox + 5
-        //             });
-        //         }
-        //     }
-        // }
-
-        for (var c = 0; c < moveableBoxes.length; c++) {
-            $(moveableBoxes[c]).offset({ top: topPositions[firstBoxPoint + c] });
+        function animateRandomBox() {
+            $(randomBox)
+                .animate({
+                    "top": Diff
+                });
         }
+
+
+        function animateEffects() {
+            for (var i = 0; i < moveableBoxes.length; i++) {
+
+                function loopBox(index) {
+                    return $(moveableBoxes[index]);
+                }
+
+                heightBox = $("ul li").height();
+
+                if (loopBox(i).hasClass("active")) {
+                    continue;
+
+                } else {
+
+                    if (i > 0) {
+                        var distanceBetweenBoxes = loopBox(i).offset().top - randomBox.offset().top;
+
+                        if (distanceBetweenBoxes > 5) {
+                            loopBox(i).animate({
+                                "top": 0
+                            });
+                        } else {
+                            loopBox(i).animate({
+                                "top": heightBox + 5
+                            });
+                        }
+                    } else {
+                        loopBox(i).animate({
+                            "top": heightBox + 5
+                        });
+                    }
+                }
+            }
+        }
+
+        animateRandomBox();
+        animateEffects();
 
 
     } catch (err) {
