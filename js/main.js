@@ -1,9 +1,4 @@
 var useBoxes = [];
-var allContentBoxes = $("ul li");
-
-for (var k = 0; k < allContentBoxes.length; k++) {
-    useBoxes.push(allContentBoxes[k]);
-}
 
 var Diff;
 var firstBox;
@@ -14,6 +9,31 @@ var randomBox;
 var heightBox;
 var lastBox = [];
 var topPositions = [];
+
+
+
+// ========================
+
+var boxes = ["Lorem ipsum dolor sit amet 1", "Lorem ipsum dolor sit amet 2", "Lorem ipsum dolor sit amet 3", "Lorem ipsum dolor sit amet 4", "Lorem ipsum dolor sit amet 5", "Lorem ipsum dolor sit amet 6", "Lorem ipsum dolor sit amet 7", "Lorem ipsum dolor sit amet 8", "Lorem ipsum dolor sit amet 9", "Lorem ipsum dolor sit amet 10"]
+var newBox;
+var inHTML = "";
+
+$.each(boxes, function(i, value) {
+    newBox = "<li id='" + (i + 1) + "'>" + value + "</li>";
+    inHTML += newBox;
+});
+console.log(inHTML);
+$(".anime-list").html(inHTML);
+
+// ========================
+
+
+
+var allContentBoxes = $(".anime-list li");
+for (var k = 0; k < allContentBoxes.length; k++) {
+    useBoxes.push(allContentBoxes[k]);
+}
+console.log(useBoxes);
 
 
 function reset() {
@@ -35,85 +55,120 @@ function getRandomNumber(min, max) {
 heightBox = $("ul li").height();
 
 
-for (p = 0; p < useBoxes.length; p++) {
-    topPositions.push($(useBoxes[p]).offset().top);
-}
-console.log(topPositions);
+// for (p = 0; p < useBoxes.length; p++) {
+//     topPositions.push($(useBoxes[p]).offset().top);
+// }
+// console.log(topPositions);
 
 firstBoxPoint = getFirstBoxPoint(4);
 moveableBoxes = useBoxes.slice(firstBoxPoint);
 firstBox = $(moveableBoxes[0]);
 
+
 $("#check").on("click", function() {
     try {
 
-        function changePositions() {
-            for (var c = 0; c < moveableBoxes.length; c++) {
-                $(moveableBoxes[c]).offset({ top: topPositions[firstBoxPoint + c] });
+        function moveableContent() {
+
+            reset();
+            randomNumber = getRandomNumber(0, moveableBoxes.length - 1);
+            randomBox = $(moveableBoxes[randomNumber]);
+            randomBox.addClass("active");
+            console.log(randomBox);
+
+            Diff = firstBox.offset().top - randomBox.offset().top;
+            // console.log(Diff)
+
+            // console.log(moveableBoxes);
+            moveableBoxes.splice(randomNumber, 1);
+            moveableBoxes.unshift(randomBox[0]);
+            // console.log(moveableBoxes);
+
+            function animateRandomBox() {
+                $(randomBox)
+                    .animate({
+                        "top": Diff
+                    });
             }
-        }
 
-        randomNumber = getRandomNumber(0, moveableBoxes.length - 1);
-        randomBox = $(moveableBoxes[randomNumber]);
-        reset();
-        randomBox.addClass("active");
+            // requestAnimationFrame(() => {});
 
+            function animateEffects() {
+                for (var i = 0; i < moveableBoxes.length; i++) {
 
-        Diff = firstBox.offset().top - randomBox.offset().top;
-
-        console.log(moveableBoxes);
-        moveableBoxes.splice(randomNumber, 1);
-        moveableBoxes.unshift(randomBox[0]);
-        console.log(moveableBoxes);
-
-        function animateRandomBox() {
-            $(randomBox)
-                .animate({
-                    "top": Diff
-                });
-        }
+                    function loopBox(index) {
+                        return $(moveableBoxes[index]);
+                    }
 
 
-        function animateEffects() {
-            for (var i = 0; i < moveableBoxes.length; i++) {
+                    heightBox = $("ul li").height();
 
-                function loopBox(index) {
-                    return $(moveableBoxes[index]);
-                }
+                    if (loopBox(i).hasClass("active")) {
+                        continue;
 
-                heightBox = $("ul li").height();
+                    } else {
 
-                if (loopBox(i).hasClass("active")) {
-                    continue;
+                        if (i > 0) {
+                            var distanceBetweenBoxes = loopBox(i).offset().top - randomBox.offset().top;
 
-                } else {
-
-                    if (i > 0) {
-                        var distanceBetweenBoxes = loopBox(i).offset().top - randomBox.offset().top;
-
-                        if (distanceBetweenBoxes > 5) {
-                            loopBox(i).animate({
-                                "top": 0
-                            });
+                            if (distanceBetweenBoxes > 5) {
+                                loopBox(i).animate({
+                                    "top": 0
+                                });
+                            } else {
+                                loopBox(i).animate({
+                                    "top": heightBox + 5
+                                });
+                            }
                         } else {
                             loopBox(i).animate({
                                 "top": heightBox + 5
                             });
                         }
-                    } else {
-                        loopBox(i).animate({
-                            "top": heightBox + 5
-                        });
                     }
                 }
             }
+
+            $.when(animateRandomBox()).then(function() {
+                animateEffects();
+            });
         }
 
-        animateRandomBox();
-        animateEffects();
+        function changeContent() {
+
+            function removeItems(array, itemLength) {
+                for (var i = 0; i < itemLength; i++) {
+                    array.pop();
+                }
+            }
+            removeItems(boxes, moveableBoxes.length);
+
+            for (i = 0; i < moveableBoxes.length; i++) {
+                boxes.push(moveableBoxes[i].innerText);
+            }
+
+            var newUpdatedBox;
+            var updatedHTML = "";
+
+            $.each(boxes, function(i, value) {
+                newUpdatedBox = "<li id='" + (i + 1) + "'>" + value + "</li>";
+                updatedHTML += newUpdatedBox;
+            });
+            $(".anime-list").html(updatedHTML);
+
+        }
 
 
+        $.when(moveableContent()).then(function() {
+            setTimeout(function() {
+                changeContent();
+                console.log(useBoxes);
+            }, 500);
+        });
     } catch (err) {
-        console.log("We have an error man! " + err);
+        console.log("We have an error man! " + err.stack);
     }
 });
+
+
+//=============================================================================================================================
