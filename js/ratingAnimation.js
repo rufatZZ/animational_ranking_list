@@ -51,7 +51,7 @@ heightBox = $("ul li").height();
 
 
 // CLICK EVENT
-$("#check").on("click", function() {
+setInterval(function() {
 
     try {
         allContentBoxes = $(".anime-list li");
@@ -167,4 +167,4 @@ $("#check").on("click", function() {
         //Here we get our an error/errors in our application
         console.log("We have an error man! " + err.stack);
     }
-});
+}, 2000);
