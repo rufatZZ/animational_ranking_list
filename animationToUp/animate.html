@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Animation List</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./css/ratingAnimation.css" />
+</head>
+
+<body>
+    <button id="up">Click for animate to up</button>
+
+    <ul class="anime-list">
+        <!--<li id="1" style="z-index: 999; background-color: mediumspringgreen">Lorem ipsum dolor sit amet 1</li>
+        <li id="2">Lorem ipsum dolor sit amet 2</li>
+        <li id="3">Lorem ipsum dolor sit amet 3</li>
+        <li id="4">Lorem ipsum dolor sit amet 4</li>
+        <li id="5">Lorem ipsum dolor sit amet 5</li>
+        <li id="6">Lorem ipsum dolor sit amet 6</li>
+        <li id="7">Lorem ipsum dolor sit amet 7</li>
+        <li id="8">Lorem ipsum dolor sit amet 8</li>
+        <li id="9">Lorem ipsum dolor sit amet 9</li>
+        <li id="10">Lorem ipsum dolor sit amet 10</li>-->
+    </ul>
+
+    <script type="text/javascript" src="./js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="./js/ratingAnimationUp.js"></script>
+
+</body>
+
+</html>
+
+
+<!--<script>
+    if (a < 0) {
+
+        // Get our moveableBoxes from our main array
+        moveableBoxesUp = useBoxes.slice(firstBoxPoint);
+        firstBox = $(moveableBoxesUp[0]);
+        workFunction = moveableContentUp();
+
+    } else if (a > 0) {
+
+        moveableBoxesDown = useBoxes.slice(0, firstBoxPoint);
+        lastBox = $(useBoxes[moveableBoxesDown.length - 1]);
+        workFunction = moveableContentDown();
+
+    } else {
+
+        return;
+
+    }
+
+    function moveableContentDown() {
+
+        reset();
+
+        randomBoxDown = $(moveableBoxesDown[randomNumber]);
+        $(randomBoxDown).addClass("active");
+
+
+        //Difference between lastBox and randomBox topPosition;  
+
+        DiffDown = lastBox.offset().top - randomBoxDown.offset().top;
+        console.log(moveableBoxesDown);
+        console.log(lastBox);
+        console.log(DiffDown);
+
+        //
+        moveableBoxesDown.splice(randomNumber, 1);
+        moveableBoxesDown.push(randomBoxDown[0]);
+
+
+        //
+        function animateRandomBoxDown() {
+            $(randomBoxDown)
+                .animate({
+                    "top": DiffDown
+                });
+        }
+
+        //Here we animate down moveableBoxes where randomBox moves
+        function animateEffectsDown() {
+            for (var i = 0; i < moveableBoxesDown.length; i++) {
+
+                function loopBox(index) {
+                    return $(moveableBoxesDown[index]);
+                }
+
+                if (loopBox(i).hasClass("active")) {
+                    continue;
+                } else {
+
+                    if (i > 0) {
+                        var distanceBetweenBoxes = loopBox(i).offset().top - randomBoxDown.offset().top;
+
+                        if (distanceBetweenBoxes > 5) {
+                            loopBox(i).animate({
+                                "top": -(heightBox + 5)
+                            });
+                        } else {
+                            loopBox(i).animate({
+                                "top": 0
+                            });
+                        }
+                    } else {
+                        loopBox(i).animate({
+                            "top": 0
+                        });
+                    }
+                }
+            }
+        }
+
+        $.when(animateRandomBoxDown()).then(function() {
+            animateEffectsDown();
+        });
+    };
+</script>-->

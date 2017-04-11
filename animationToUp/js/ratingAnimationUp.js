@@ -50,7 +50,7 @@ heightBox = $("ul li").height();
 
 
 // CLICK EVENT
-setInterval(function() {
+$("#up").click(function() {
 
     allContentBoxes = $(".anime-list li");
     useBoxes = [];
@@ -160,4 +160,4 @@ setInterval(function() {
         }, 500);
     });
 
-}, 10000);
+});
